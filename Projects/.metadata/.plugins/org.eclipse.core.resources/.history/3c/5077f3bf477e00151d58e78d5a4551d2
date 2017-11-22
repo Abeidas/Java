@@ -1,0 +1,16 @@
+#include<iostream>
+#include "Bunny"
+/*
+ * main.c
+ *
+ *  Created on: 28.10.2015
+ *      Author: Ahmad
+ */
+using namespace std;
+int main ()
+{
+	Bunny first ();
+}
+
+
+

@@ -1,0 +1,16 @@
+/*
+ * Bunny.cpp
+ *
+ *  Created on: 29.10.2015
+ *      Author: Ahmad
+ */
+enum Sex { MALE, FEMALE };
+enum Colour { WHITE, BROWN, BLACK, SPOTTED};
+enum NAME { SOSO, FOFO, LOLO, DODO, KOKO};
+class Bunny {
+public:
+	Sex sex;
+	Colour colour;
+	NAME name;
+};
+

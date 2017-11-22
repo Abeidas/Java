@@ -1,0 +1,165 @@
+package edu.kit.informatik;
+
+import java.lang.Math;
+
+/**
+ * 
+ * @author Ahmad Beidas
+ * @version 1.0
+ */
+public class Search {
+    /**
+     * 
+     * @param p
+     *            the input phrase from the user
+     * @return returns the keyword of the phrase, either "title", "creator" or "year" otherwise "wrong attribute" is
+     *         returned.
+     * @throws SearchInquiryException
+     *             if the keyword isn't title, creator nor year, an exception occurs.
+     */
+    public String getKeyword(String p) throws SearchInquiryException {
+        String keyWord = p.substring(0, p.indexOf("="));
+        if (!keyWord.equals("title") && keyWord.equals("creator") && keyWord.equals("year")) {
+            throw new SearchInquiryException("Wrong Input!");
+        } else {
+            return keyWord;
+        }
+    }
+
+    /**
+     * 
+     * @param p
+     *            the input phrase from the user.
+     * @return returns the either the name of : the title or the creator, or the date of the book.
+     */
+    public String getValue(String p) {
+        return p.substring(p.indexOf("=") + 1);
+    }
+
+    /**
+     * 
+     * @param w1
+     *            first word
+     * @param w2
+     *            second word
+     * @return the normalized Levenshtein distance
+     * @throws SearchInquiryException
+     */
+    public double getNormalizedLevenshteinDistance(String w1, Book w2) throws SearchInquiryException {
+        if (bookValue(w1, w2).equals("unknown")) {
+            return 1.0;
+        } else {
+            Levenshtein normalized = new Levenshtein(getValue(w1), bookValue(w1, w2));
+            return normalized.getDistance() / Math.max(getValue(w1).length(), bookValue(w1, w2).length());
+        }
+    }
+
+    /**
+     * 
+     * @param p
+     *            the input phrase from the user
+     * @param book
+     *            the book to be compared with the phrase
+     * @return returns the certain value from the book corresponding to the keyword from the phrase.
+     * @throws SearchInquiryException
+     *             if the keyword isn't "title", "creator" nor "year" an Exception if called.
+     */
+    public String bookValue(String p, Book book) throws SearchInquiryException {
+        if (getKeyword(p).equals("title")) {
+            return book.getTitle();
+        }
+        if (getKeyword(p).equals("creator")) {
+            return book.getCreator();
+        }
+        if (getKeyword(p).equals("year")) {
+            return book.getYear();
+        } else {
+            throw new SearchInquiryException("Keyword is not valid!");
+        }
+    }
+
+    /**
+     * 
+     * @param tolerance
+     *            the double that will be inserted in the argument command line.
+     * @param phrase
+     *            the phrase input from the user.
+     * @param book
+     *            the book to be compared with the phrase.
+     * @return return true if normalized is smaller than the tolerance.
+     * @throws SearchInquiryException
+     *             if the tolerance is smaller than 0 or bigger than 1,
+     * 
+     */
+    public boolean tolerance(double tolerance, String phrase, Book book) throws SearchInquiryException {
+        if (tolerance < 0 || tolerance > 1) {
+            throw new SearchInquiryException("Tolerance should be between zero and one!");
+        } else if (compoundSearchInquiry(phrase, book) < tolerance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 
+     * @param w1
+     *            word to be search.
+     * @param w2
+     *            word to be compared in the library
+     * @return the normalized distance.
+     * @throws SearchInquiryException
+     *             calls for the exception if the none of the conditions are true.
+     */
+    public double compoundSearchInquiry(String w1, Book w2) throws SearchInquiryException {
+        if (!w1.substring(0, 3).equals("AND") && !w1.substring(0, 2).equals("OR")) {
+            proofer(w1);
+            return getNormalizedLevenshteinDistance(w1, w2);
+        }
+        if (w1.substring(0, 3).equals("AND")) {
+            return Math.max(compoundSearchInquiry(firstRekurParam(reduction(w1)), w2),
+                    compoundSearchInquiry(secondRekurParam(reduction((w1))), w2));
+        }
+        if (w1.substring(0, 2).equals("OR")) {
+            return Math.min(compoundSearchInquiry(firstRekurParam(reduction(w1)), w2),
+                    compoundSearchInquiry(secondRekurParam(reduction((w1))), w2));
+        }
+        throw new SearchInquiryException("Wrong search input!");
+    }
+
+    /**
+     * 
+     * @param p
+     *            a certain phrase from the search inquiry.
+     * @return returns the String reduced, that is without the "AND"s or "OR"s, also removes the brackets at the edges,
+     *         e.g AND(title=java,creator=ahmad)---> title=java,creator=ahmad.
+     */
+    public String reduction(String p) {
+        String reduced = p.substring(p.indexOf("(") + 1, p.length() - 1);
+        return reduced;
+    }
+
+    /**
+     * 
+     * @param p
+     *            a certain phrase from the search inquiry.
+     * @return if two recursive compounds inquiries are to be compared, cuts the phrase to give the first parameter,
+     *         e.g: title=programmieren,creator=reussner--->title=programmieren
+     */
+    public String firstRekurParam(String p) {
+        String firstParam = p.substring(0, p.indexOf(","));
+        return firstParam;
+    }
+
+    /**
+     * 
+     * @param p
+     *            a certain phrase from the search inquiry.
+     * @return if two recursive compounds inquiries are to be compared, cuts the phrase to give the second parameter,
+     *         e.g: title=programmieren,creator=reussner--->creator=reussner
+     */
+    public String secondRekurParam(String p) {
+        String secondParam = p.substring(p.indexOf(",") + 1, p.length());
+        return secondParam;
+    }
+}

@@ -1,0 +1,47 @@
+#include "parseint.h"
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+// Returns the value of c or -1 on error
+int parseDecimalChar(char c) {
+	int digit = c;
+	if ( digit < 48 || digit > 57) {
+		return -1;
+	} else {
+		return digit - 48;
+
+	}
+	(void)c;
+	return -1;
+}
+
+// Parses a non-negative integer, interpreted as octal when starting with 0, decimal otherwise. Returns -1 on error.
+int parseInt(char *string) {
+	int decimalNumber = 0;
+	int iterate;
+	for (iterate = strlen(string); iterate > 0; iterate--) {
+		int positionOfDigit = (strlen(string) - iterate) + 1;
+		char parsedNumber = string[iterate - 1];   //iterating from right to left
+		int digit = parseDecimalChar(parsedNumber);//changes char to a digit
+		if (digit == -1) {                         //if char is not a number
+			return -1;
+		}
+		int position = digit*pow(10, positionOfDigit - 1);
+		decimalNumber = position + decimalNumber;
+	}
+	if (string[0] == '0') {                      //if the number starts with a zero
+		int i = 1;                               //convert from octal to decimal
+		int octalNumber = 0;
+		while (decimalNumber != 0) {
+			int digit = decimalNumber % (int) pow(10, i);
+			decimalNumber = decimalNumber - digit;
+			digit = (digit / pow(10, i - 1)) * pow(8, i - 1);
+			octalNumber = octalNumber + digit;
+			i++;
+		}
+		return octalNumber;
+	}
+	(void)string;
+	return decimalNumber;
+}

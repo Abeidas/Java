@@ -1,0 +1,47 @@
+package Tree;
+public class Interactiveface {
+	public static void main(String args[]) {
+		Preorder<Integer,String> preorder = new Preorder<Integer,String>();
+		Inorder<Integer,String> inorder = new Inorder<Integer,String>();
+		Levelorder<Integer,String> levelorder = new Levelorder<Integer,String>();
+		BinarySearchTree<Integer,String> City = new BinarySearchTree<Integer,String>();
+		String firstWord = "";
+		while(!firstWord.equals("quit")) {
+			Terminal.printLine("Ented desired command");
+	    	String command = Terminal.readLine();
+    		String[] spaceSplit = command.split(" ");		
+    		firstWord = spaceSplit[0];		
+			if(firstWord.equals("insert")) {
+				String[] dotsplitter = spaceSplit[1].split(":");
+				String secondword = dotsplitter[0];
+				int data = Integer.parseInt(secondword);
+				String value = dotsplitter[1];
+				City.insert(data,value);
+			}
+			else if(firstWord.equals("search")) {
+				String[] dotsplitter = spaceSplit[1].split(":");
+				String secondword = dotsplitter[0];
+				int data = Integer.parseInt(secondword);
+				Terminal.printLine(City.search(data));				
+			}
+			else if(firstWord.equals("info")) {
+				if(args.length == 0 || args[1].equals("traverse=inorder")) {
+					System.out.println(inorder);
+				}
+				else if(args[1].equals("traverse=preorder")) {
+					System.out.println(preorder);
+				}
+				else if(args[1].equals("traverse=levelorder")) {
+					System.out.println(levelorder);
+				}
+				else {
+					if (!args[1].equals("traverse=preorder")
+					&& !args[1].equals("traverse=inorder")
+					&& !args[1].equals("taverse=levelorder")) {
+					Terminal.printLine("Incomprehensive argument input");
+			}
+		}
+	}
+}
+	}
+}

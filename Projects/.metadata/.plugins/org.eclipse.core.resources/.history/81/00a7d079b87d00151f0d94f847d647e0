@@ -1,0 +1,22 @@
+#include<iostream>
+/*
+ * main.c
+ *
+ *  Created on: 28.10.2015
+ *      Author: Ahmad
+ */
+using namespace std;
+int main ()
+{
+	int i;
+	cout << "Welcome, enter a number please";
+	cin >> i;
+	if (i > 55 && i < 79) {
+		cout << "YOU WIN";
+	} else {
+		cout << "YOU LOSE";
+	}
+}
+
+
+

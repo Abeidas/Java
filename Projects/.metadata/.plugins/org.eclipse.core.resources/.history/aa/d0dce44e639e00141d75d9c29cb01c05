@@ -1,0 +1,10 @@
+package Tree;
+
+abstract public class Initializer<Data extends Comparable<Data>, Value> {
+	BinarySearchTree<Data, Value> tree = new BinarySearchTree<Data, Value>();
+	public void Traverse() {
+			Chosentraversetype();
+		}
+	
+	public abstract void Chosentraversetype();
+}

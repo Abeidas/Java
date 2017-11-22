@@ -1,0 +1,7 @@
+1. Make yourself familiar with the development environment
+2. Run the JUnit test SimpleEditMeTest in the package edu.kit.ipd.swt1
+3. Implement the function foo() and getMatNum() in the class edu.kit.edu.swt1.EditMe
+4. Rerun the Test edu.kit.ipd.swt1.SimpleEditMeTest (Don't rely on the test case :)
+6. Run "mvn package". Either by command line or right clicking on package.launch "Run As -> package" This will create a zip file in the target/ directory
+7. Upload the generated lez-src.zip to https://lez.ipd.kit.edu
+8. Profit!

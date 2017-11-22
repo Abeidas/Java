@@ -1,0 +1,142 @@
+package edu.kit.informatik;
+import java.util.ArrayList;
+
+
+public class Graph {
+    ArrayList<Airport> airports;
+    int [][] adjacenceMatrix;
+    int [][] distanceMatrix;
+    /**
+     * Constructor initializes the the ArrayList<Airport> airports.
+     */
+    public Graph() {
+        airports = new ArrayList<Airport>();
+    }
+    /**
+     * This method represents the first part of serializing, it inserts an object airport in the
+     * ArrayList<Airport> airports,
+     * @param airportDetails airportDetails[0] is the IATA code, airportDetails[1] is the airports name.
+     * @return returns true if the insertion was successful.
+     */
+    public void insertAirport(String[] airportDetails) {
+        //Check in interactive:  IATA for [A-Z]{3} and airPort name for [a-zA-Z_-]+, length must be 2
+        if (searchForAirportName(airportDetails[1]) != null) {
+            throw new IllegalArgumentException("Error, during inserting an airport."
+                    + "an airport exists with the name: " + airportDetails[0]);
+        } else if (searchForIATA(airportDetails[0]) != null) {
+            throw new IllegalArgumentException("Error, during inserting an airport."
+                    + "an airport exists with the IATA code: " + airportDetails[1]);
+        } else {
+            airports.add(new Airport(airportDetails[0], airportDetails[1]));
+            System.out.println("inserted");
+        }
+    }
+    /**
+     * This method represents the second part of serializing, it fills in the reachable cities for 
+     * airports in the graph.
+     * @param flightRoute flightRoute[0] is the starting airport, flightRoute[1] is the destination flight
+     * @param distance distance between the two airports.
+     * destination airport and flightRoute[2] is the distance.
+     */
+    public void flightRoutes(String[] flightRoute, int distance) {
+        //Check in interactive: if the length is 2, distance must be greater than zero, integer parse!
+        if (searchForIATA(flightRoute[0]) == null) {
+            throw new IllegalArgumentException("Error, during connecting airports, the Starting airport: " 
+                    + flightRoute[0] + ", doesn't exist.");
+        } else if (searchForIATA(flightRoute[1]) == null) {
+            throw new IllegalArgumentException("Error, during connecting airports, the destination airport: " 
+                    + flightRoute[1] + ", doesn't exist.");
+        } else if (distance < 0) {
+            throw new IllegalArgumentException("Error, during connecting airports, distance must be "
+                    + "greater than zero");
+        } else {
+            searchForIATA(flightRoute[0]).addRoute(new Route(searchForIATA(flightRoute[1]), distance));
+        }
+    }
+    public int[][] adjacenceMatrix() {
+    	adjacenceMatrix = new int[airports.size()][airports.size()];
+        for (int i = 0; i < airports.size(); i++) {
+            for (int j = 0; j < airports.size(); j++) {
+                int distance = distanceFinder(airports.get(i), airports.get(j));
+                adjacenceMatrix[i][j] = (distance > 0) ? 1 : 0;
+            }
+        }
+		return adjacenceMatrix;
+    }
+    public int[][] distanceMatrix() {
+    	distanceMatrix = new int[airports.size()][airports.size()];
+        for (int i = 0; i < airports.size(); i++) {
+            for (int j = 0; j < airports.size(); i++) {
+                distanceMatrix[i][j] = distanceFinder(airports.get(i), airports.get(j));
+            }
+        }
+		return distanceMatrix;
+    }
+    public int[][] routesMatrix(int stopOvers) {
+        int length = adjacenceMatrix.length;
+        int [][] template = copyArray(adjacenceMatrix);
+        int[][] routeMatrix = new int[length][length];
+        for (int iterate = 0; iterate < stopOvers; iterate++) {
+            for (int i = 0; i < length; i++) {
+                for (int k = 0; k < length; k++) {
+                    for (int j = 0; j < length; j++) {
+                        routeMatrix[i][j] += template[i][k] * adjacenceMatrix[k][j];
+                    }
+                }
+            }
+        }
+        return routeMatrix;
+    }
+    public int[][] shortestPath() {
+        int [][] shortestPath = copyArray(distanceMatrix);
+        for ( int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix.length; j++) {
+                for (int k = 0; k < distanceMatrix.length; k++) {
+                    shortestPath[i][j] = Math.min(shortestPath[i][j], shortestPath[i][k] + shortestPath[k][j]);
+                }
+            }
+        }
+		return shortestPath;
+    }
+    /**
+     * This method searches for an airport using the airport's name.
+     * @param airportName airportDetails[0] is the IATA code, airportDetails[1] is the airports name.
+     * @return the airport, that has the airportName from the list of airports, otherwise returns null.
+     */
+    public Airport searchForAirportName(String airportName) {
+        if (!airports.isEmpty()) {
+            for (Airport airport : airports) {
+                System.out.println(airport.getAirportName());
+                if (airport.getAirportName().equals(airportName)) {
+                    return airport;
+                }
+            }
+        }
+        return null;
+    }
+    public Airport searchForIATA(String IATA) {
+        for (Airport airport : airports) {
+            if (airport.getIATACode().equals(IATA)) {
+                return airport;
+            }
+        }
+        return null;
+    }
+    public int distanceFinder(Airport start, Airport end) {
+        for (Route route : start.getReachableCities()) {
+            if (route.getDestination() == end) {
+                return route.getDistance();
+            }
+        }
+		return -1;
+    }
+    public int[][] copyArray(int[][] array) {
+        int[][] toBeReturned = new int[array.length][array.length];
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length; j++) {
+                toBeReturned[i][j] = array[i][j];
+            }
+        }
+		return toBeReturned;
+    }
+}

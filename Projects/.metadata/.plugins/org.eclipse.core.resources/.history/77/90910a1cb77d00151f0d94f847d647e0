@@ -1,0 +1,15 @@
+#include<iostream>
+/*
+ * main.c
+ *
+ *  Created on: 28.10.2015
+ *      Author: Ahmad
+ */
+int main ()
+{
+	cout << "Welcome, enter a number please";
+
+}
+
+
+

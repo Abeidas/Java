@@ -1,0 +1,7 @@
+19:02:31 **** Incremental Build of configuration Default for project p2 ****
+make 
+gcc -g -W -Wall -Werror -std=c99 -c countchr.c
+gcc -o countchr main.o testlib.o countchr.o
+
+19:02:32 Build Finished (took 660ms)
+

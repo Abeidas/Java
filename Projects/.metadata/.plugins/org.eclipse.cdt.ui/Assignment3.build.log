@@ -1,0 +1,10 @@
+19:02:20 **** Build of configuration Default for project Assignment3 ****
+make 
+gcc -W -Wall -Werror -std=c99 -g -c datastruct.c
+datastruct.c:8:6: error: expected '=', ',', ';', 'asm' or '__attribute__' before '.' token
+ first.uniqueID = 0;
+      ^
+make: *** [datastruct.o] Error 1
+
+19:02:24 Build Finished (took 4s.29ms)
+

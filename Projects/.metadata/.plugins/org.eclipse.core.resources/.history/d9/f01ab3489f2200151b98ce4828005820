@@ -1,0 +1,103 @@
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+
+public class Main {
+	
+//	static MyBarrier barrier = new MyBarrier(2);
+//	static Thread[] threads = new Thread[4];
+//	static int balance = 0;
+//	public static void main(String args[]) {
+//		Thread ahmad = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				System.out.println("Started");
+//				for( int i = 0; i < 10000; i++) {
+//					balance++;
+//				}
+//				System.out.println(balance);
+//				try {
+//					barrier.sync();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//			}
+//			
+//		});
+//		Thread ahmad2 = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				System.out.println("Started");
+//				for( int i = 0; i < 10000; i++) {
+//					balance--;
+//					
+//				}
+//				System.out.println(balance);
+//				try {
+//					barrier.sync();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			
+//		});
+//		Thread ahmad3 = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				System.out.println("Started");
+//				for( int i = 0; i < 10000; i++) {
+//					balance--;
+//					
+//				}
+//				try {
+//					barrier.sync();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			
+//		});
+//		Thread ahmad4 = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				System.out.println("Started");
+//				for( int i = 0; i < 10000; i++) {
+//					balance--;
+//					
+//				}
+//				try {
+//					barrier.sync();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			
+//		});
+//		ahmad.start();
+//		ahmad2.start();
+//		
+//		
+//	}
+	public static void main(String args[]) {
+		Queue<Pizza> oven = new PriorityQueue<Pizza>();
+		Pizzeria restaurant = new Pizzeria( oven);
+		try {
+			for( int i = 0; i < 1; i++) {
+				restaurant.Backe(new Pizza());
+				
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

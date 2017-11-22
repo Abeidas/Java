@@ -1,0 +1,8 @@
+23:13:08 **** Incremental Build of configuration Default for project firstAss1.2 ****
+make 
+gcc -g -W -Wall -Werror -std=c99 -c parseint.c
+gcc -g -W -Wall -Werror -std=c99 -c main.c
+gcc -o parseint parseint.o testlib.o main.o
+
+23:13:09 Build Finished (took 1s.5ms)
+

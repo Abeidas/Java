@@ -1,0 +1,135 @@
+package edu.kit.informatik;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+/**
+ * This class commutes between the class Graph and the User, this class reads firstly the destination
+ * Text file, creates a graph of airports. Then receives the commands from the user.
+ * @author Ahmad Beidas
+ * @version 1.0
+ */
+public class Interactive {
+    /**
+     * This message is printed when the file is not found, thus exits the system.
+     */
+    private static String mERRORMESSAGE = "Error, file was not found!";
+    /**
+     * This message is printed when the command line argument isn't one line long.
+     */
+    private static String mUSAGE = "Error, wrong input";
+    /**
+     * The graph.
+     */
+    Graph graph = new Graph();
+    /**
+     * 
+     * @param args
+     *            command line argument.
+     * @throws OwnException
+     *             the author's exceptions
+     */
+    public Interactive(String[] args) {
+        if (args.length != 1) {
+            Terminal.printLine(mUSAGE);
+            System.exit(1);
+        }
+        FileReader in = null;
+        try {
+            in = new FileReader(args[0]);
+        } catch (FileNotFoundException e) {
+            Terminal.printLine(mERRORMESSAGE);
+            System.exit(1);
+        }
+        BufferedReader reader = new BufferedReader(in);
+        try {
+            String line = reader.readLine();
+            while (!line.equals("--")) {
+                graph.insertAirport(line);
+                line = reader.readLine();
+             }
+            line = reader.readLine();
+            while (line != null) {
+                graph.flightRoutes(line);
+                line = reader.readLine();
+            }
+        } catch (IllegalArgumentException e) {
+            Terminal.printLine(e.getMessage());
+            System.exit(1);
+        } catch (IOException e) {
+            Terminal.printLine(mERRORMESSAGE);
+            System.exit(1);
+        }
+        graph.refreshMatrices();
+    }
+    /**
+     * This method receives the commands "airport", "connected", "distance", "routes", "shortest" and
+     * "quit".
+     */
+    public void commands() {
+        Terminal.printLine("Welcome! Please enter a command.");
+        String command = Terminal.readLine();
+        while (!command.equals("quit")) {
+            try {
+                if (command.substring(0, 7).equals("airport")) {
+                    String print = graph.searchUsingIATA(command.substring(8, 11)).getAirportName();
+                    Terminal.printLine(print);
+                } else if (command.substring(0, 9).equals("connected")) {
+                    giveBackMatrix("connected", command.substring(10, command.length()));
+                } else if (command.substring(0, 8).equals("distance")) {
+                    giveBackMatrix("distance", command.substring(9, command.length()));
+                } else if (command.substring(0, 6).equals("routes")) {
+                    giveBackMatrix("routes", command.substring(7, command.length()));
+                } else if (command.substring(0, 8).equals("shortest")) {
+                    giveBackMatrix("shortest", command.substring(9, command.length()));
+                } else {
+                    Terminal.printLine("Error, invalid commmand!");
+                }
+            } catch (IllegalArgumentException e) {
+                Terminal.printLine(e.getMessage());
+            } catch (StringIndexOutOfBoundsException e) {
+                Terminal.printLine("Error, a command must follow input data!");
+            } catch (NullPointerException e) {
+                Terminal.printLine("Error, airport is not found!");
+            }
+            command = Terminal.readLine();
+        }
+    }
+    /**
+     * This method cuts the command() method short
+     * @param command the certain command called upon
+     * @param string the input data.
+     */
+    private void giveBackMatrix(String command, String string) {
+        switch (command) {
+        case "connected" : String[] inputForConnected = string.split(";");
+            int startingForConnected = graph.searchForPosition(inputForConnected[0]);
+            int endingForConnected = graph.searchForPosition(inputForConnected[1]);
+            Terminal.printLine(String.valueOf(graph.adjacencyMatrix[startingForConnected][endingForConnected]));
+            break;
+        case "distance" : String[] inputForDistance = string.split(";");
+            int startingForDistance = graph.searchForPosition(inputForDistance[0]);
+            int endingForDistance = graph.searchForPosition(inputForDistance[1]);
+            int distance = graph.distanceMatrix[startingForDistance][endingForDistance];
+            String distanceToString = (distance == -1) ? "inf" : String.valueOf(distance);
+            Terminal.printLine(distanceToString);
+            break;
+        case "routes" : String[] inputForRoutes = string.split(";");
+            int startingForRoutes = graph.searchForPosition(inputForRoutes[0]);
+            int endingForRoutes = graph.searchForPosition(inputForRoutes[1]);
+            Terminal.printLine(String.valueOf(graph.routesMatrix(Integer.parseInt(inputForRoutes[2]))
+                    [startingForRoutes][endingForRoutes]));
+        break;
+            case "shortest" : String[] input = string.split(";");
+            int starting = graph.searchForPosition(input[0]);
+            int ending = graph.searchForPosition(input[1]);
+            String print = String.valueOf(graph.shortestPath()[starting][ending]);
+            print = (print.equals("Infinity")) ? "inf" : print.substring(0, print.length() - 2);
+            Terminal.printLine(String.valueOf(print));
+            break;
+        default:
+            break;
+        }
+    }
+}

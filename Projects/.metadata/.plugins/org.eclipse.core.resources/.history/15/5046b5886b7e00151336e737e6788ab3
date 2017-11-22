@@ -1,0 +1,34 @@
+/*
+ * Bunny.h
+ *
+ *  Created on: 29.10.2015
+ *      Author: Ahmad
+ */
+
+#ifndef BUNNY_H_
+#define BUNNY_H_
+
+
+class Bunny {
+	public:
+	    Bunny() {
+	    	setSex();
+	    }
+
+	void setSex() {
+		sex = static_cast<Sex>(rand() % 2);
+	}
+	Sex getSex() {
+		return sex;
+	}
+	private:
+	    Sex sex;
+	    Colour colour;
+	    NAME name;
+	    Bunny *next;
+	    Bunny *mother;
+};
+
+
+
+#endif /* BUNNY_H_ */

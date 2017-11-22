@@ -1,0 +1,48 @@
+/*
+ * Bunny.cpp
+ *
+ *  Created on: 29.10.2015
+ *      Author: Ahmad
+ */
+enum Sex { MALE, FEMALE };
+enum Colour { WHITE, BROWN, BLACK, SPOTTED};
+enum NAME { THUMPER, OREO, LOLO, PEPPER, SMOKEY, PEANUT};
+class Bunny {
+	public:
+	    Bunny(Bunny* moth) {
+	    	mother = moth;
+	    	this->getSex() = static_cast<Sex>(rand() % 3);
+	    }
+
+	Colour getColour() const {
+		return colour;
+	}
+
+	void setColour(Colour colour) {
+		this->colour = colour;
+	}
+
+	const Bunny*& getNext() const {
+		return next;
+	}
+
+	void setNext(const Bunny*& next) {
+		this->next = next;
+	}
+
+	Sex getSex() const {
+		return sex;
+	}
+
+	void setSex(Sex sex) {
+		this->sex = sex;
+	}
+
+	private:
+	    Sex sex;
+	    Colour colour;
+	    NAME name;
+	    Bunny *next;
+	    Bunny *mother;
+};
+

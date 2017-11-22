@@ -1,0 +1,20 @@
+package Tree;
+
+public class Preorder<Data extends Comparable <Data>, Value> extends Initializer<Data, Value> {
+	public  String preorder(Node<Data, Value> preorderednode) {
+		if( tree.root == null) {	
+			String theroot = tree.root.getData() + " : " + tree.root.getValue();
+			return theroot;
+		}
+		String traverse = null;
+		traverse = traverse + preorderednode.getData() + " : " + preorderednode.getValue() + " , ";
+		preorder(preorderednode.getLeftchild());
+		preorder(preorderednode.getRightchild());
+		return traverse;		
+}
+
+	@Override
+	public void Chosentraversetype() {	
+		preorder(tree.root);
+	}	
+}

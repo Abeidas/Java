@@ -1,0 +1,10 @@
+package edu.kit.informatik;
+
+public class Test {
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+        String[][] detail = {{"HAM" , "Hamburg"}, {"FKB" , "Karlsruhe_Baden-Baden"}, 
+        		{"TXL" , "Berlin-Tegel"}, {"FRA" , "Frankfurt_am_Main"}, {"HAM" , "Hamburg"}};
+        
+    }
+}

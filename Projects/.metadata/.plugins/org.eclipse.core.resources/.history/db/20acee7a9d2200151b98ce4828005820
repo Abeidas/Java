@@ -1,0 +1,30 @@
+import java.util.Queue;
+
+
+public class Pizzeria {
+	Queue<Thread> queue;
+	public Pizzeria(Queue<Thread> queue) {
+		this.queue = queue;
+	}
+	synchronized void Backe(Thread pizza) throws InterruptedException {
+		while(queue.size() == 2) {
+			System.out.println(queue.size());
+			wait();
+		}
+		queue.add(pizza);
+		System.out.println("Pizza is being baked..");
+		notify();
+	}
+	synchronized Thread sell() throws InterruptedException {
+		if (queue.isEmpty()) {
+			System.out.println("Waiting for a pizza...");
+			wait();
+		}
+		notifyAll();
+		Thread pizza = queue.remove();
+		System.out.println("Pizza is removed from oven");
+		System.out.println("Pizza is served!");
+		return pizza;
+		
+	}
+}

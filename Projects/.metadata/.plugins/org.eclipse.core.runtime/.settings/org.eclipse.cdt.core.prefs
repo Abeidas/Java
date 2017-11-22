@@ -1,0 +1,10 @@
+build.all.configs.enabled=false
+build.proj.ref.configs.enabled=false
+eclipse.preferences.version=1
+environment/workspace/PATH/delimiter=;
+environment/workspace/PATH/operation=replace
+environment/workspace/PATH/value=C\:/Program Files/Java/jre1.8.0_45/bin/server;C\:/Program Files/Java/jre1.8.0_45/bin;C\:/Program Files/Java/jre1.8.0_45/lib/amd64;C\:\\ProgramData\\Oracle\\Java\\javapath;C\:\\Program Files\\jdk1.7.0_71\\bin;C\:\\Users\\Ahmad\\gcc\\bin;C\:\\Users\\Ahmad\\gcc\\libexec\\gcc\\x86_64-pc-mingw32\\4.9.2;C\:\\Program Files\\Java\\jdk1.6.0_45\\bin;C\:\\apache-maven-3.3.1/bin;C\:\\Program Files\\TortoiseSVN\\bin;C\:\\WINDOWS\\system32;C\:\\WINDOWS;C\:\\WINDOWS\\System32\\Wbem;C\:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Program Files (x86)\\Skype\\Phone\\;C\:\\Program Files\\eclipse;
+environment/workspace/append=true
+environment/workspace/appendContributed=true
+macros/workspace=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<macros>\r\n<stringListMacro name\="PATH" type\="VALUE_TEXT_LIST">\r\n<value name\="C\:/Program Files/Java/jre1.8.0_45/bin/server"/>\r\n<value name\="C\:/Program Files/Java/jre1.8.0_45/bin"/>\r\n<value name\="C\:/Program Files/Java/jre1.8.0_45/lib/amd64"/>\r\n<value name\="C\:\\ProgramData\\Oracle\\Java\\javapath"/>\r\n<value name\="C\:\\Program Files\\jdk1.7.0_71\\bin"/>\r\n<value name\="C\:\\Users\\Ahmad\\gcc\\bin"/>\r\n<value name\="C\:\\Users\\Ahmad\\gcc\\libexec\\gcc\\x86_64-pc-mingw32\\4.9.2"/>\r\n<value name\="C\:\\Program Files\\Java\\jdk1.6.0_45\\bin"/>\r\n<value name\="C\:\\apache-maven-3.3.1/bin"/>\r\n<value name\="C\:\\Program Files\\TortoiseSVN\\bin"/>\r\n<value name\="C\:\\WINDOWS\\system32"/>\r\n<value name\="C\:\\WINDOWS"/>\r\n<value name\="C\:\\WINDOWS\\System32\\Wbem"/>\r\n<value name\="C\:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"/>\r\n<value name\="C\:\\Program Files (x86)\\Skype\\Phone\\"/>\r\n<value name\="C\:\\Program Files\\eclipse"/>\r\n</stringListMacro>\r\n</macros>\r\n
+org.eclipse.cdt.core.showSourceRootsAtTopLevelOfProject=true

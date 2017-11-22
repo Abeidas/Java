@@ -1,0 +1,26 @@
+#include<iostream>
+/*
+ * main.c
+ *
+ *  Created on: 28.10.2015
+ *      Author: Ahmad
+ */
+using namespace std;
+int main ()
+{
+	int i;
+	cout << "Welcome, please type numbers 8 to 23\n";
+	int iterate = 8;
+	while (iterate < 24) {
+		cin >> i;
+		if (i != iterate) {
+			cout << "Wrong number, exiting program";
+			return -1;
+		}
+		iterate++;
+	}
+	cout << "Succes";
+}
+
+
+

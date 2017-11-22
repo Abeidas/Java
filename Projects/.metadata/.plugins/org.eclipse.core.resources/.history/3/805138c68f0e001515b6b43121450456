@@ -1,0 +1,103 @@
+package edu.kit.ipd.swt1.jmjrst.popart;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+/**
+ * 
+ * @author Ahmad
+ *
+ */
+public class MYGUI {
+
+	private JFrame frame;
+	private JButton dateiSpeichern;
+	private JPanel panel;
+	private Component dateiLaden;
+	private JButton vorschau;
+	private JTextField collage;
+	private JLabel label;
+	private Image image;
+	private JLabel label2;
+	SimplePopArtCollage art = new SimplePopArtCollage();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MYGUI window = new MYGUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public MYGUI() throws IOException {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 * @throws IOException 
+	 */
+	private void initialize() throws IOException {
+		frame = new JFrame("POP-ART-COLLAGE");
+		frame.setSize(800, 800);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+		frame.getContentPane().setLayout(null);
+		
+		dateiSpeichern = new JButton("Datei Speichern");
+		vorschau       = new JButton("Vorschau");
+		dateiLaden     = new JButton("Datei Laden");
+		collage        = new JTextField("...");
+		label          = new JLabel("Collage");
+		label2         = new JLabel("image");
+		BufferedImage image = art.getCollage(ImageIO.read(new File(
+				"src/test/resources/11272097_940445896006655_1684847466_n.jpg")), "1234");
+		image.getScaledInstance(600, 600, Image.SCALE_SMOOTH);
+		JLabel picLabel = new JLabel(new ImageIcon(image));
+		
+		
+		dateiSpeichern.setBounds(20, 10, 300, 35);
+		dateiLaden.setBounds(420, 10, 300, 35);
+		vorschau.setBounds(600, 50, 100, 35);
+		collage.setBounds(150, 50, 400, 35);
+		label.setBounds(20, 45, 50, 50);
+		picLabel.setBounds(200, 200, 600, 600);
+		
+		
+		frame.getContentPane().add(vorschau);
+		frame.getContentPane().add(dateiSpeichern);
+		frame.getContentPane().add(dateiLaden);
+		frame.getContentPane().add(collage);
+		frame.getContentPane().add(label);
+		frame.getContentPane().add(picLabel);
+	}
+
+}

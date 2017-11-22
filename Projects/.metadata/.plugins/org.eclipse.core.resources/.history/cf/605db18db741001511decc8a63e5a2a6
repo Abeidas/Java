@@ -1,0 +1,85 @@
+package edu.kit.informatik;
+
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author Ahmad
+ * @version 1.0
+ */
+public class Interactive {
+    Field field = new Field();
+    public void command(String[] args) throws OwnException {
+        field.commandLine(args);
+        Player current = field.firstPlayer;
+        Terminal.printLine("Please enter command!");
+        String command = Terminal.readLine();
+        while (!command.equals("quit")) {
+            try {
+                if (command.equals("end")) {
+                    String winner = (field.firstPlayer.sum() > field.secondPlayer.sum()) ? "P1" : "P2";
+                    Terminal.printLine(String.valueOf(field.firstPlayer.sum()));
+                    Terminal.printLine(String.valueOf(field.secondPlayer.sum()));
+                    Terminal.printLine(winner + " wins");
+                } else if (command.substring(0, 5).equals("place")) {
+                    String[] input = command.substring(6, command.length()).split(";");
+                    check(current.getInventory(), input[0]);
+                    if (input[3].equals("H")) {
+                        field.insert(input[0], Integer.parseInt(input[1]), Integer.parseInt(input[2]), true, current);
+                        Terminal.printLine("OK");
+                    } else if (input[3].equals("V")) {
+                        field.insert(input[0], Integer.parseInt(input[1]), Integer.parseInt(input[2]), false, current);
+                        Terminal.printLine("OK");
+                    } else {
+                        Terminal.printLine("Error, please insert H for horizontal, or V for vertical, as a direction");
+                    }
+                    current = (current == field.firstPlayer) ? field.secondPlayer : field.firstPlayer;
+                } else if (command.substring(0, 5).equals("score")) {
+                    if (command.substring(6, 8).equals("P1")) {
+                        Terminal.printLine(String.valueOf(field.firstPlayer.sum()));
+                    } else if (command.substring(6, 8).equals("P2")) {
+                        Terminal.printLine(String.valueOf(field.secondPlayer.sum()));
+                    } else {
+                        throw new OwnException("Error, invalid input!");
+                    }
+                } else if (command.substring(0, 3).equals("bag")) {
+                    if (command.substring(4, 6).equals("P1")) {
+                        Terminal.printLine(field.firstPlayer.inventoryToString());
+                    } else if (command.substring(4, 6).equals("P2")) {
+                        Terminal.printLine(field.secondPlayer.inventoryToString());
+                    } else {
+                        throw new OwnException("Error, invalid input!");
+                    }
+                } else if (command.substring(0, 8).equals("rowprint")) {
+                    int number = Integer.parseInt(command.substring(9, 10));
+                    Terminal.printLine(field.toString(number, true));
+                } else if (command.substring(0, 8).equals("colprint")) {
+                    int number = Integer.parseInt(command.substring(9, 10));
+                    Terminal.printLine(field.toString(number, false));
+                } else {
+                    Terminal.printLine("Error, invalid command");
+                }
+            } catch (OwnException e) {
+               Terminal.printLine(e.getMessage());
+            }
+            command = Terminal.readLine();
+        }
+    }
+    public void check(ArrayList<Character> inventory, String string) throws OwnException {
+        boolean foundElement = false;
+        char[] input = string.toCharArray();
+        for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < inventory.size(); j++) {
+                if (input[i] == inventory.get(j)) {
+                    inventory.remove(j);
+                    foundElement = true;
+                    break;
+                }
+                
+            }
+            if (!foundElement) {
+                throw new OwnException("Error, player can only choose characters from inventory!");
+            }
+        }
+    }
+}

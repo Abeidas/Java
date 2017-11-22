@@ -1,0 +1,9 @@
+#include "greet.h"
+#include <stdio.h>
+
+void greet(int32_t times) {
+    int i;
+    for (i = 0; i < times; i++) {
+        printf("%d Hello world \n", i);
+    }
+}

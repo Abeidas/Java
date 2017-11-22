@@ -1,0 +1,55 @@
+package edu.kit.informatik;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Interactive {
+    Graph graph = new Graph();
+    private static String mERRORMESSAGE = "Error, file was not found!";
+    private static String mUSAGE = "Error, wrong input";
+    /**
+     * 
+     * @param args
+     *            command line argument.
+     * @throws OwnException
+     *             the author's exceptions
+     */
+    public void interactive(String[] args) {
+        System.out.println("asd");
+        if (args.length != 1) {
+            Terminal.printLine(mUSAGE);
+            System.exit(1);
+        }
+        FileReader in = null;
+        try {
+            in = new FileReader(args[0]);
+        } catch (FileNotFoundException e) {
+            Terminal.printLine(mERRORMESSAGE);
+            System.exit(1);
+        }
+        BufferedReader reader = new BufferedReader(in);
+        try {
+            String line = reader.readLine();
+            line = reader.readLine();
+            while (!line.equals("--")) {
+                graph.insertAirport(line);
+                line = reader.readLine();
+             }
+            while (line != null) {
+                graph.flightRoutes(line);
+            }
+        } catch (IllegalArgumentException e) {
+            Terminal.printLine(e.getMessage());
+            System.exit(1);
+        } catch (IOException e) {
+            Terminal.printLine(mERRORMESSAGE);
+            System.exit(1);
+        }
+        commands();
+    }
+    private void commands() {
+
+	}
+}

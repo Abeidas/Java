@@ -1,0 +1,28 @@
+#include <stdlib.h>
+/*
+ * Bunny.cpp
+ *
+ *  Created on: 29.10.2015
+ *      Author: Ahmad
+ */
+enum Sex { MALE, FEMALE };
+enum Colour { WHITE, BROWN, BLACK, SPOTTED};
+enum NAME { THUMPER, OREO, LOLO, PEPPER, SMOKEY, PEANUT};
+class Bunny {
+	public:
+	    Bunny() {
+	    	mother = moth;
+	    	setSex();
+	    }
+
+	void setSex() {
+		sex = static_cast<Sex>(rand() % 2);
+	}
+	private:
+	    Sex sex;
+	    Colour colour;
+	    NAME name;
+	    Bunny *next;
+	    Bunny *mother;
+};
+

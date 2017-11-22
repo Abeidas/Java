@@ -1,0 +1,54 @@
+package edu.kit.informatik.booking;
+
+import edu.kit.informatik.Terminal;
+
+public class Interactive {
+	public static void main( String args[]) {
+		Terminal.printLine("Welcome to Program!");
+		Terminal.printLine("Please ener desired command");
+		String command = Terminal.readLine();
+		while( true) {
+			command = Terminal.readLine();
+			if (command == "quit") {
+				Terminal.printLine("Thanks for using Program!");
+			} else if( command.substring(0, 3) == "add") {
+				String data = command.substring(4, command.length() - 1);
+				String[] arr = data.split(";");
+				if( arr.length != 4) {
+					Terminal.printLine("Invalid format!");
+				} else {
+					
+				}
+			} else if( command.substring(0, 4) == "book") {
+				String data = command.substring(5, command.length() - 1);
+				String[] arr = data.split(";");
+				if( arr.length != 3) {
+					Terminal.printLine("Invalid format!");
+				} else {
+					
+				}
+			} else if( command.substring(0, 5) == "remove") {
+				String data = command.substring(5, command.length() - 1);
+				 
+			} else if( command.substring(0, 7) == "tickets") {
+				String data = command.substring(8, command.length() - 1);
+				String[] arr = data.split(";");
+				if( arr.length != 4) {
+					Terminal.printLine("Invalid format!");
+				} else {
+					
+				}
+			} else if( command.substring(0, 8) == "bookings") {
+				String data = command.substring(9, command.length() - 1);
+				String[] arr = data.split(";");
+				if( arr.length != 3) {
+					Terminal.printLine("Invalid format!");
+				} else {
+					
+				}
+			} else {
+				Terminal.printLine("Unkown Command, please type quit if finished with program");
+			}
+		}
+	}
+}

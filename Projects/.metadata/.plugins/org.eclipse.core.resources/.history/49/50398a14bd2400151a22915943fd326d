@@ -1,0 +1,19 @@
+
+public class Main {
+	
+	
+
+	public static void main(String args[]) {
+		int i = 0;
+		int j = 0;
+		MyRunnable run = new MyRunnable(100, 100, i, j);
+		
+		Thread[] threads = new Thread[4];
+		for (int l = 0; l < 4; l++) {
+			
+			threads[i] = new Thread(run);
+			threads[i].start();
+		}
+	}
+
+}

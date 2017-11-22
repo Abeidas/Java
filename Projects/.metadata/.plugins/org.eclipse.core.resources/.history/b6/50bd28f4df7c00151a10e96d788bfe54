@@ -1,0 +1,38 @@
+#include "datastruct.h"
+
+struct processes {
+	int uniqueID;
+	struct processes *next;
+};
+struct processes first;
+first.uniqueID = 0;
+int increment = 0;
+/* insert process in data structure */
+void insert ( int id, int priority ) 
+{
+	/* your code goes here */
+	increment++;
+	/* avoid 'unused parameter' warning */
+	(void)id;
+	(void)priority;
+}
+
+
+/* return and remove element with highest priority */
+int pop ()
+{
+	/* your code goes here */
+
+	/* don't forget to adapt the return value! */
+	return 0;
+}
+
+
+/* remove element with given id */
+void popId ( int id )
+{
+	/* your code goes here */
+
+	/* avoid 'unused parameter' warning */
+	(void)id;
+}

@@ -1,0 +1,63 @@
+package edu.kit.informatik;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+/**
+ * 
+ * @author Ahmad
+ * @version 1.0
+ */
+public class Player {
+    private ArrayList<Character> inventory;
+    private Map<Integer, Integer> map;
+    /**
+     * Constructor
+     */
+    Player() {
+        inventory = new ArrayList<Character>();
+        map = new HashMap<Integer, Integer>(20);
+        for (int i = 0; i < 20; i++) {
+            map.put(i, 0);
+            System.out.println(i);
+        }
+    }
+    /**
+     * @return the inventory
+     */
+    public ArrayList<Character> getInventory() {
+        return inventory;
+    }
+    /**
+     * @return the map
+     */
+    public Map<Integer, Integer> getMap() {
+        return map;
+    }
+    /**
+     * @param inventory the inventory to set
+     */
+    public void setInventory(ArrayList<Character> inventory) {
+        this.inventory = inventory;
+    }
+    public int sum() {
+        int sum = 0;
+        for (int i = 0; i < map.size(); i++) {
+            sum += map.get(i);
+        }
+        return sum;
+    }
+    public String inventoryToString() {
+        if (inventory.isEmpty()) {
+            //
+        }
+        String toString = "";
+        for (char element : inventory) {
+            toString += element;
+        }
+        return toString;
+    }
+}

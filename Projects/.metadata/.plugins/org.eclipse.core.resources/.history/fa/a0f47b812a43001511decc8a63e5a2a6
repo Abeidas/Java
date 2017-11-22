@@ -1,0 +1,334 @@
+package edu.kit.informatik;
+
+import java.util.ArrayList;
+import java.util.EmptyStackException;
+import java.util.Stack;
+
+/**
+ * 
+ * @author Ahmad
+ * @version 1.0
+ */
+public class Field {
+    /**
+     * First player.
+     */
+    private Player firstPlayer;
+    /**
+     * Second player.
+     */
+    private Player secondPlayer;
+    /**
+     * The gameField
+     */
+    private Block[][] field;
+    /**
+     * Counts in a certain line, how many blocks the first player processed
+     */
+    private int firstCounter = 0;
+    /**
+     * Counts in a certain line, how many blocks the second player processed
+     */
+    private int secondCounter = 0;
+    /**
+     * The stack used to calculate the result of a certain line.
+     */
+    private Stack<Integer> stack;
+    /**
+     * The Constructor initializes the field, filling a hashtag in each cell.
+     */
+    
+    public Field() {
+        firstPlayer = new Player();
+        secondPlayer = new Player();
+        field = new Block[10][10];
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                field[i][j] = new Block('#', false);
+            }
+        }
+    }
+    /**
+     * Reads the Command-line-argument and adds the stones to the players.
+     * @param args Command-line-argument.
+     * @throws OwnException If command-line is not invalid.
+     */
+    public void commandLine(String[] args) throws OwnException {
+        if (args.length != 2) {
+            throw new OwnException("Error, command-line must only be two lines!");
+        } else if (!args[0].matches("[0-9*+-]*") || !args[0].matches("[0-9*+-]*")) {
+            throw new OwnException("Error, command-line can only consist of the pattern : [0-9*+-]!");
+        } else {
+            addToInventory(firstPlayer.getInventory(), args[0]);
+            addToInventory(secondPlayer.getInventory(), args[1]);
+            
+        }
+    }
+    /**
+     * 
+     * @param input The stones that are to be inserted.
+     * @param column The starting columnTemp-coordinate.
+     * @param row The starting rowTemp-coordinate.
+     * @param horizontal Instructs the method, to iterate, either horizontally or vertically, on the field.
+     * @param player The player that instructed the command.
+     * @throws OwnException when a player tries to insert in a non-empty block.
+     */
+    public void insert(String input, int column, int row, boolean horizontal, Player player) throws OwnException {
+        char[] stones = input.toCharArray();
+        if (stones.length == 0 || stones.length > 3 || column > field.length 
+                || column < 0 || row < 0 || row > field.length) {
+            Terminal.printLine("Error, please try again");
+        } else {
+            int i = 0;
+            int columnTemp = column;
+            int rowTemp = row;
+//            System.out.println("Insert, Column:" + columnTemp);
+//            System.out.println("Insert, Row:" + rowTemp);
+            while (stones.length > i) {
+                if (field[columnTemp][rowTemp].getCharacter() == '#') {
+                    field[columnTemp][rowTemp].setCharacter(stones[i]);
+                    usedBy(field[columnTemp][rowTemp], player);
+                    columnTemp = (horizontal) ? columnTemp + 1 : columnTemp;
+                    rowTemp = (horizontal) ? rowTemp : rowTemp + 1;
+                    i++;
+                } else {
+                    throw new OwnException("Error, cannot place on a non-empty block!");
+                }
+            }
+            try {
+                postFixNotation(stones.length, column - 1, row - 1, horizontal);
+            } catch (OwnException e) {
+                Terminal.printLine(e.getMessage());
+//                remove(stones.length, column, row, horizontal);
+            } catch (EmptyStackException e) {
+                Terminal.printLine("Error, invalid input!");
+//                remove(stones.length, column, row, horizontal);
+            }
+        }
+    }
+    /**
+     * This method uses the method checkLine(), it performs it (length of stones + 1) times,
+     * the first one is in the parallel direction to the inserted stones, and the others are opposing
+     * that direction and are performed for each inserted stone.
+     * @param input Indicates how many characters are to be inserted,
+     *  in other words the number of iterations in the While loop.
+     * @param row Row.
+     * @param column Column.
+     * @param horizontal Instructs the method, to iterate, either horizontally or vertically, on the field.
+     * @throws OwnException Throws an exception, if characters are isolated.
+     */
+    public void postFixNotation(int input, int column, int row, boolean horizontal) throws OwnException {
+        boolean validDirection = true;
+        int columnTemp = column;
+        int rowTemp = row;
+//        System.out.println("PostFix, Column:" + columnTemp);
+//        System.out.println("PostFix, Row:" + rowTemp);
+        int iterate = 0;
+        validDirection = checkLine(columnTemp, rowTemp, horizontal);
+        String type = (horizontal) ? "horizontal" : "vertical";
+//        System.out.println(type);
+        while (iterate < input) {
+//        	System.out.println("------------------------------");
+//        	System.out.println("PostFixNotation, colum:" + columnTemp);
+//        	System.out.println("PostFixNotation, row:" + rowTemp);
+            boolean validOpposite = checkLine(columnTemp, rowTemp, !horizontal);
+            if (!(validDirection || validOpposite)) {
+                throw new OwnException("Error, is isolated!");
+            }
+            columnTemp = (horizontal) ? columnTemp + 1 : columnTemp;
+            rowTemp = (horizontal) ? rowTemp : rowTemp + 1;
+            iterate++;
+        }
+    }
+    /**
+     * 
+     * @param column Column.
+     * @param row Row.
+     * @param horizontal Instructs the method, to iterate, either horizontally or vertically, on the field.
+     * @return Returns if it is acceptable, to insert a certain character in a certain cell. 
+     * @throws OwnException If input is false.
+     */
+    public boolean checkLine(int column, int row, boolean horizontal) throws OwnException {
+        stack = new Stack<Integer>();
+        int key = (horizontal) ? column : row + 10;
+        boolean lastIsOperand = false;
+        int iterate = 0;
+        int columnTemp = (horizontal) ? 0 : column;
+        int rowTemp = (horizontal) ? row : 0;
+        while (iterate < 10) {
+//        	System.out.println("Stack Size:" + stack.size());
+//        	System.out.println("checkLine, column:" + columnTemp);
+//        	System.out.println("checkLine, row:" + rowTemp);
+            char symbol = field[columnTemp][rowTemp].getCharacter();
+//            System.out.println("symbol:" + symbol);
+            if (!isNumber(symbol) && symbol != '#' && !stack.isEmpty()) {
+                int right = stack.pop();
+                int left = stack.pop();
+                int result = calculate(symbol, right, left);
+//                System.out.println("Result:" + result);
+                stack.push(result);
+                lastIsOperand = true;
+            } else if (isNumber(symbol)) {
+//                System.out.println("If it is a number:" + symbol);
+                stack.push(Character.getNumericValue(symbol));
+                lastIsOperand = false;
+            }
+            iterate++;
+            columnTemp = (horizontal) ? columnTemp + 1 : columnTemp;
+            rowTemp = (horizontal) ? rowTemp : rowTemp + 1;
+        }
+        if (lastIsOperand) {
+            wordValue(key);
+        }
+        return lastIsOperand;
+    }
+    /**
+     * This method transforms a certain Line into a String.
+     * @param number Either the column's or the row's number.
+     * @param horizontal Decides wether the line is a row or a column.
+     * @return String.
+     */
+    public String toString(int number, boolean horizontal) {
+        int i = 0;
+        int columnTemp = (horizontal) ? 0 : number;
+        int rowTemp = (horizontal) ? number : 0;
+        String string = "";
+        while (i < 10) {
+            string += field[columnTemp][rowTemp].getCharacter();
+            columnTemp = (horizontal) ? columnTemp + 1 : columnTemp;
+            rowTemp = (horizontal) ? rowTemp : rowTemp + 1;
+            i++;
+        }
+        return string;
+    }
+    /**
+     * 
+     * @param math The Operator
+     * @param firstNumber First number in the calculation.
+     * @param secondNumber Second number in the calculation.
+     * @return The result.
+     */
+    public int calculate(char math, int firstNumber, int secondNumber) {
+        int result = 0;
+//        System.out.println(math);
+        switch (math) {
+        case '+' : result = firstNumber + secondNumber;
+            break;
+        case '*' : result = firstNumber * secondNumber;
+            break;
+        case '-' : result = firstNumber - secondNumber;
+            break;
+        default:
+            break;
+        }
+        return result;
+    }
+    /**
+     * This method inserts the result from the stack into the Hashmap of the corresponding player,
+     * who contributed to a certain line more than the other player.
+     * @param key The index, in which the value is to be inserted into a Hashmap.
+     */
+    public void wordValue(int key) {
+//    	System.out.println("First Counter:" + firstCounter);
+//    	System.out.println("Second Counter:" + secondCounter);
+//        System.out.println("Key:" + key);
+        if (!stack.isEmpty()) {
+            if (firstCounter > secondCounter) {
+//                System.out.println("Adding to first player");
+                firstPlayer.getMap().put(key, stack.pop());
+                secondPlayer.getMap().put(key, 0);
+            } else {
+//            	System.out.println();
+//            	System.out.println("Adding to second player");
+                secondPlayer.getMap().put(key, stack.pop());
+                firstPlayer.getMap().put(key, 0);
+            }
+            firstCounter = 0;
+            secondCounter = 0;
+        }
+    }
+    /**
+     * This method removes the inserted line, if the input is either isolated or invalid.
+     * @param length Length of the input array.
+     * @param column Column.
+     * @param row Row.
+     * @param horizontal Horizontal.
+     */
+    public void remove(int length, int column, int row, boolean horizontal) {
+        int columnTemp = column;
+        int rowTemp = row;
+        int i = 0;
+        while (i < length) {
+            field[columnTemp][rowTemp].setCharacter('#');
+            columnTemp = (horizontal) ? columnTemp + 1 : columnTemp;
+            rowTemp = (horizontal) ? rowTemp : rowTemp + 1;
+            i++;
+        }
+    }
+    private void usedBy(Block block, Player player) {
+        if (player.equals(firstPlayer)) {
+            firstCounter++;
+        } else if (player.equals(secondPlayer)) {
+            secondCounter++;
+        }
+    }
+    /**
+     * 
+     * @param character Character.
+     * @return Whether a char is a number not.
+     */
+    public boolean isNumber(char character) {
+        if (String.valueOf(character).matches("^[0-9]")) {
+            return  true;
+        } return false;
+    }
+    /**
+     * This method adds the stones into the player's inventory.
+     * @param player The inventory of a certain player.
+     * @param arg Single line from the argument.
+     */
+    public void addToInventory(ArrayList<Character> player, String arg) {
+        char[] symbols = arg.toCharArray();
+        for (char symbol : symbols) {
+            player.add(symbol);
+        }
+    }
+    /**
+     * This method checks a certain block and sees which player added a block,
+     * if the block was used by the first player, increments the first counter,
+     * if the block was used by the second player, increments the second counter,
+     * if the block wasn't used, does nothing.
+     * @param block The block to be checked
+     */
+    public void counter(Block block) {
+        if (block.getUsedBy().equals(firstPlayer)) {
+            this.firstCounter++;
+        } else {
+            this.secondCounter++;
+        }
+    }
+    /**
+     * @return the firstPlayer
+     */
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
+    /**
+     * @return the secondPlayer
+     */
+    public Player getSecondPlayer() {
+        return secondPlayer;
+    }
+    /**
+     * @param secondPlayer the secondPlayer to set
+     */
+    public void setSecondPlayer(Player secondPlayer) {
+        this.secondPlayer = secondPlayer;
+    }
+    /**
+     * @param firstPlayer the firstPlayer to set
+     */
+    public void setFirstPlayer(Player firstPlayer) {
+        this.firstPlayer = firstPlayer;
+    }
+}

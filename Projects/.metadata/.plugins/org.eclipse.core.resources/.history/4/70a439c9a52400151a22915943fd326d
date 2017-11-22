@@ -1,0 +1,25 @@
+
+public class MyRunnable implements Runnable {
+	int height;
+	int width;
+		int i;
+		int j;
+			
+	  public MyRunnable(int height, int width, int i, int j) {
+		  this.height = height;
+		  this.width = width;
+		  this.i = i;
+		  this.j = j;
+	  }
+	public void run() {
+		if( j < height) {
+			j++;
+		} else if(j == width) {
+			j = 0;
+			i++;
+		} // method[i][j]
+		if( width != i && j != height) {
+			new Thread(this).start();
+		}
+	}
+}

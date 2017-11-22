@@ -1,0 +1,88 @@
+package edu.kit.informatik;
+
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author Ahmad
+ * @version 1.0
+ */
+public class Interactive {
+    Field field = new Field();
+    public void command(String[] args) throws OwnException {
+        field.commandLine(args);
+        Player current = field.getFirstPlayer();
+        Terminal.printLine("Please enter command!");
+        String command = Terminal.readLine();
+        while (!command.equals("quit")) {
+            try {
+                if (command.equals("end")) {
+                    String winner = (field.getFirstPlayer().sum() > field.getSecondPlayer().sum()) ? "P1" : "P2";
+                    Terminal.printLine(String.valueOf(field.getFirstPlayer().sum()));
+                    Terminal.printLine(String.valueOf(field.getSecondPlayer().sum()));
+                    Terminal.printLine(winner + " wins");
+                } else if (command.substring(0, 5).equals("place")) {
+                    String[] input = command.substring(6, command.length()).split(";");
+                    check(current.getInventory(), input[0]);
+                    if (!(input[3].equals("H") || input[3].equals("V"))) {
+                        throw new OwnException("Error, for direction please type either (H) or (V)");
+                    }
+                    boolean horizontal = (input[3].equals("H")) ? true : false;
+                    field.insert(input[0], Integer.parseInt(input[2]), Integer.parseInt(input[1]), horizontal, current);
+                    current = (current == field.getFirstPlayer()) ? field.getSecondPlayer() : field.getFirstPlayer();
+                    Terminal.printLine("OK");
+                } else if (command.substring(0, 5).equals("score")) {
+                    if (command.substring(6, 8).equals("P1")) {
+                        Terminal.printLine(String.valueOf(field.getFirstPlayer().sum()));
+                    } else if (command.substring(6, 8).equals("P2")) {
+                        Terminal.printLine(String.valueOf(field.getSecondPlayer().sum()));
+                    } else {
+                        throw new OwnException("Error, invalid input!");
+                    }
+                } else if (command.substring(0, 3).equals("bag")) {
+                	if (!(command.substring(4, 6).equals("P1") || command.substring(4, 6).equals("P2"))) {
+                	    throw new OwnException("Error, to find the first player's score please type (score P1), "
+                	    		+ "to find the second player's score please type (score P2)");
+                	}
+                	String print = (command.substring(4, 6).equals("P1")) ? field.getFirstPlayer().inventoryToString()
+                			: field.getSecondPlayer().inventoryToString();
+                    if (command.substring(4, 6).equals("P1")) {
+                        Terminal.printLine(field.getFirstPlayer().inventoryToString());
+                    } else if (command.substring(4, 6).equals("P2")) {
+                        Terminal.printLine(field.getSecondPlayer().inventoryToString());
+                    } else {
+                        throw new OwnException("Error, invalid input!");
+                    }
+                } else if (command.substring(0, 8).equals("rowprint")) {
+                    int number = Integer.parseInt(command.substring(9, 10));
+                    Terminal.printLine(field.toString(number, true));
+                } else if (command.substring(0, 8).equals("colprint")) {
+                    int number = Integer.parseInt(command.substring(9, 10));
+                    Terminal.printLine(field.toString(number, false));
+                } else {
+                    Terminal.printLine("Error, invalid command");
+                }
+            } catch (OwnException e) {
+               Terminal.printLine(e.getMessage());
+            }
+            command = Terminal.readLine();
+        }
+    }
+    public void check(ArrayList<Character> inventory, String string) throws OwnException {
+        boolean foundElement = false;
+        char[] input = string.toCharArray();
+        for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < inventory.size(); j++) {
+                if (input[i] == inventory.get(j)) {
+                    inventory.remove(j);
+                    foundElement = true;
+                    break;
+                }
+                
+            }
+            if (!foundElement) {
+                throw new OwnException("Error, player can only choose characters from inventory!");
+            }
+        }
+    }
+}

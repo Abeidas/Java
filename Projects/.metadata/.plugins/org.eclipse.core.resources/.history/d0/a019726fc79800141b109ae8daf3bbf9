@@ -1,0 +1,65 @@
+package Tree;
+
+public class BinarySearchTree<Data extends Comparable<Data>, Value> {
+	Node<Data ,Value> root;
+    public BinarySearchTree() {
+		this.root = null;
+	}
+    
+	public void insert(Data data, Value value) {
+        Node<Data,Value> nodetoadd = new Node<Data, Value>(data, value);
+                	traverse(root , nodetoadd);
+        }
+        private void traverse(Node<Data, Value> node, Node<Data, Value> nodetoadd) {
+        	
+        	if(node==null) {
+        		node= new Node(nodetoadd.getData(),nodetoadd.getValue());
+        	}
+        	if (node.getData().compareTo(nodetoadd.getData()) == 0) {
+        		
+        		node.setValue(nodetoadd.getValue());
+        		return;
+        		//System.out.println(getData().nodetoadd);
+        	}
+        	if (nodetoadd.getData().compareTo(node.getData()) < 0 && node.getLeftchild() == null) {
+             
+                    node.setLeftchild(nodetoadd);
+                    return;
+        	}
+                else {
+                    traverse (node.getLeftchild() , nodetoadd);
+            }
+        
+           if ( nodetoadd.getData().compareTo(node.getData()) > 0 && node.getRightchild() == null) {
+               
+            	    node.setRightchild(nodetoadd);
+            	    return;
+           }
+                else {
+                    traverse (node.getRightchild() , nodetoadd);
+            }
+              
+        }
+    
+        public Value search(Data data) {
+        	
+        	return find(data, root);
+        	
+        }
+        public Value find(Data data, Node<Data, Value> node) {
+        	if (node != null) {
+        		if (node.getData().compareTo(data) == 0) {
+        			return node.getValue();
+        		}
+        		else if (node.getData().compareTo(data) < 0) {
+        			find(data, node.getLeftchild());
+        			
+        		}
+        		else if (node.getData().compareTo(data) > 0) {
+        			find(data, node.getRightchild());
+        			
+        		}
+        }
+        	return null;
+}
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/jmjrst.pop-art-collage-template/src/main/java/edu/kit/ipd/swt1/jmjrst/popart/Main.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="edu.kit.ipd.swt1.jmjrst.popart.Main"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-s src/test/resources/11272097_940445896006655_1684847466_n.jpg&#13;&#10;-d src/test/resources/11272097_940445896006655_1684847466_n1.jpg&#13;&#10;-p osgw12345"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="jmjrst.pop-art-collage-template"/>
+</launchConfiguration>

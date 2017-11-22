@@ -1,0 +1,6 @@
+20:41:15 **** Incremental Build of configuration Default for project p1 ****
+make 
+gcc -o greet main.o testlib.o greet.o
+
+20:41:15 Build Finished (took 445ms)
+

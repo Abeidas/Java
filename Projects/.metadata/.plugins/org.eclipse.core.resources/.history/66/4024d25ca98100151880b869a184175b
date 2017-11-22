@@ -1,0 +1,12 @@
+#include "testlib.h"
+#include "parseint.h"
+
+int main() {
+	test_start("parseint.c");
+
+	test_equals_int(parseDecimalChar('&'), -1);
+	test_equals_int(parseInt("010"), 7);
+	test_equals_int(parseInt("10"), 19);
+	test_equals_int(parseInt("?"), -3);
+	return test_end();
+}

@@ -1,0 +1,15 @@
+package Tree;
+
+public class Testing {
+	public static void main(String args[]) {
+		BinarySearchTree<Integer,String> test = new BinarySearchTree<Integer, String>();
+		test.insert(50, "lotfi");
+		test.insert(20, "hosni");
+		test.insert(50, "fa7i");
+		test.insert(80, "fikri");
+		test.insert(70, "sub7i");
+		test.insert(10, "mad7i");
+		test.insert(30, "hosnie");
+		test.insert(90, "boosni");
+	}
+}

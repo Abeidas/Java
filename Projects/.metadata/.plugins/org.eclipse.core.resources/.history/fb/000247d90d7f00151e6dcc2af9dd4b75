@@ -1,0 +1,37 @@
+/*
+ * BunnyList.h
+ *
+ *  Created on: 30.10.2015
+ *      Author: Ahmad
+ */
+
+#ifndef BUNNYLIST_H_
+#define BUNNYLIST_H_
+class BunnyList {
+	public:
+	BunnyList() {
+		head = tail = NULL;
+	}
+	void addBunny(Bunny bunny) {
+		if (head == NULL) {
+			head = tail = bunny;
+		} else {
+			tail->getNext() = bunny;
+			tail = bunny;
+		}
+	}
+	void killOldBunny(Bunny bunny) {
+		if (bunny == head) {
+			head = head->getNext();
+			bunny = NULL;
+		}
+	}
+	private:
+	Bunny *head;
+	Bunny *tail;
+};
+
+
+
+
+#endif /* BUNNYLIST_H_ */

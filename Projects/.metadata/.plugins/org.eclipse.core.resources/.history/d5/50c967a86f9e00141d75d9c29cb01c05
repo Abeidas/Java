@@ -1,0 +1,16 @@
+package Tree;
+
+public class Levelorder<Data extends Comparable <Data>, Value> extends Initializer<Data, Value> {
+	public  String Chosentraversetype(Node<Data, Value> levelorderednode) {
+		if( tree.root == null) {	
+			String theroot = tree.root.getData() + " : " + tree.root.getValue();
+			return theroot;
+		}
+		String traverse = null;		
+		Chosentraversetype(levelorderednode.getLeftchild());
+		traverse = traverse + levelorderednode.getData() + " : " + levelorderednode.getValue() + " , ";
+		Chosentraversetype(levelorderednode.getRightchild());
+		traverse = traverse + levelorderednode.getData() + " : " + levelorderednode.getValue() + " , ";
+		return traverse;		
+	}
+}
